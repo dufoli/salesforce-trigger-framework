@@ -1,15 +1,15 @@
 public class TriggerDispatcher {
 
      public static void Run(ITriggerHandler handler) {
+        Map<String, List<SObject>> dictionnary = new Map<String, List<SObject>> ();
 
         List<SObject> triggerNew = trigger.new;
         Map<Id, SObject> triggerNewMap = trigger.newMap;
 
         if (handler instanceof IValidable) {
             IValidable validable = (IValidable) handler;
-            ByPass__c bypassObj = ByPass__c.getInstance(UserInfo.getUserId());
 
-            if (bypassObj == null || !bypassObj.ByPassVR__c) {
+            if (TriggerBypass_URL.isValidationRuleDisabled()) {
                 if (Trigger.IsBefore) {
                     if (Trigger.IsInsert) {
                         triggerNew = validable.ValidateInsert(trigger.new);
@@ -25,32 +25,31 @@ public class TriggerDispatcher {
             return;
         }
 
-        handler.LoadData ();
+        dictionnary = handler.LoadData ();
         if (Trigger.IsBefore) {
             if (Trigger.IsInsert) {
-                handler.BeforeInsert(triggerNew);
+                handler.BeforeInsert(triggerNew, dictionnary);
             }
             else if (Trigger.IsUpdate) {
-                handler.BeforeUpdate(triggerNewMap, trigger.oldMap);
+                handler.BeforeUpdate(triggerNewMap, trigger.oldMap, dictionnary);
             }
             else if (Trigger.IsDelete) {
-                handler.BeforeDelete(trigger.oldMap);
+                handler.BeforeDelete(trigger.oldMap, dictionnary);
             }
         }
         if (Trigger.IsAfter) {
             if (Trigger.IsInsert) {
-                handler.AfterInsert(Trigger.newMap);
+                handler.AfterInsert(Trigger.newMap, dictionnary);
             }
             else if (Trigger.IsUpdate) {
-                handler.AfterUpdate(trigger.newMap, trigger.oldMap);
+                handler.AfterUpdate(trigger.newMap, trigger.oldMap, dictionnary);
             }
             else if (trigger.IsDelete) {
-                handler.AfterDelete(trigger.oldMap);
+                handler.AfterDelete(trigger.oldMap, dictionnary);
             }
             else if (trigger.isUndelete) {
-                handler.AfterUndelete(trigger.oldMap);
+                handler.AfterUndelete(trigger.oldMap, dictionnary);
             }
         }
-        handler.WriteData ();
     }
 }
