@@ -15,3 +15,5 @@
 	<li>Implement methods of interface.</li>
 	<li>Create a trigger for your object (all events). and call the static TriggerDispatcher.Run method with first parameter : a new TriggerHandler</li>
 </ol>
+
+You can implements IValidable to handle validation rules on trigger side.
