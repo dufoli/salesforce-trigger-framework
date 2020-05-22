@@ -1,3 +1,8 @@
+/*
+* @description This is the bypass system to bypass validation rules or trigger
+* @author: Olivier Dufour
+* @date May 22, 2020
+*/
 public class Bypass_UTL {
     // for apex run to disable trigger
     public static boolean isBypassAllTrigger = false;

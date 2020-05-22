@@ -6,7 +6,7 @@
 public interface ITriggerHandler {
   public Map<String, List<SObject>> LoadData ();
 
-  void BeforeInsert(SObject[] newItems);
+  void BeforeInsert(SObject[] newItems, Map<String, List<SObject>> dico);
 
   void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dico);
 

@@ -1,3 +1,8 @@
+/*
+* @description This is the triggerDispatcher
+* @author: Olivier Dufour
+* @date May 22, 2020
+*/
 public class TriggerDispatcher {
 
      public static void Run(ITriggerHandler handler) {
