@@ -23,3 +23,4 @@ TODO :
 * rename pipeline to objectWriter
 * find a way to limit to one object writer by object (best is to use generics and SObjecType for that or a name function of APipelineItem)
 * make an full example of dependant pipeline
+* provide best practice to avoid static method in service class which is very ugly but used by most of Salesforce project.
