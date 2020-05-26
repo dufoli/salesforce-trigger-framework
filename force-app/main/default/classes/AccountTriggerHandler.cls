@@ -1,32 +1,48 @@
 public class AccountTriggerHandler implements ITriggerHandler {
+    public Map<String, APipelineItem> CreatePipelines(Map<String, List<SObject>> dico) {
+        Map<String, APipelineItem> pipelines = new Map<String, APipelineItem> ();
+        pipelines.put('Task', new TaskMgr(dico));
+        return pipelines;
+    }
+    //todo check if we can use generic
+    public class TaskMgr extends APipelineItem {
+        TaskMgr(Map<String, List<Object>> dico) {
+            super(dico);
+        }
+        TaskMgr createTask() {
+            toInsert.add(new Task());
+            return this;
+        }
+        TaskMgr setDefaultSubject() {
+            for (SObject t : toInsert) {
+                ((Task)t).subject = 'email';
+            }
+            return this;
+        }
+    }
     public Map<String, List<SObject>> LoadData () {
         // here we load all SOQL/ SOSL for service class
         // populate dictionnary
-        return new Map<String, List<SObject>> ();
+        Map<String, List<SObject>> dico = new Map<String, List<SObject>>();
+        //example of user dico
+        dico.put(User.sObjectType.getDescribe().getName(), [Select Id from User LIMIT 1]);
+        return dico;
     }
 
-    public void BeforeInsert(List<SObject> newItems, Map<String, List<SObject>> dictionnary) {
-        List<SObject> objectsToInsert = new List<SObject> ();
-        List<SObject> objectsToUpdate = new List<SObject> ();
+    public void BeforeInsert(List<SObject> newItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {
         // call service class and try to avoid SOQL inside them and do it in loadData
-        //Account_SVE.AnInsertHandler ((Account[])newItems, dictionnary);
-        //Account_SVE.AnOtherInsertHandler ((Account[])newItems, dictionnary);
-        //use objectsToInsert.addAll() or objectsToUpdate.addAll() of returned value of service class
-        if (objectsToInsert.size() > 0) {
-            insert objectsToInsert;
-        }
-        if (objectsToUpdate.size() > 0) {
-            update objectsToUpdate;
-        }
+        //AnInsertHandler ((Account[])newItems, dictionnary);
+        //AnOtherInsertHandler ((Account[])newItems, dictionnary);
+        ((TaskMgr)pipelines.get('Task')).createTask().setDefaultSubject().Write();
     }
 
-    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {
+    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {
         List<SObject> objectsToInsert = new List<SObject> ();
         List<SObject> objectsToUpdate = new List<SObject> ();
         // call service class and try to avoid SOQL inside them and do it in loadData
         // paid attention to write data in a single DML at the very end when possible
-        //Account_SVE.AnUpdateHandler ((Account[])newItems, dictionnary);
-        //Account_SVE.AnOtherOne ((Account[])newItems, dictionnary);
+        //AnUpdateHandler ((Account[])newItems, dictionnary);
+        //AnOtherOne ((Account[])newItems, dictionnary);
         if (objectsToInsert.size() > 0) {
             insert objectsToInsert;
         }
@@ -35,14 +51,14 @@ public class AccountTriggerHandler implements ITriggerHandler {
         }
     }
 
-    public void BeforeDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void BeforeDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {}
 
-    public void AfterInsert(Map<Id, SObject> newItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterInsert(Map<Id, SObject> newItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {}
 
-    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {}
 
-    public void AfterDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {}
 
-    public void AfterUndelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterUndelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary, Map<String, APipelineItem> pipelines) {}
 
 }

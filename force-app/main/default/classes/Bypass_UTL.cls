@@ -15,7 +15,7 @@ public class Bypass_UTL {
 
     static {
         //TODO cache
-        ByPass__c bypass = ByPass__c.getIstance(UserInfo.getUserId());
+        ByPass__c bypass = ByPass__c.getInstance(UserInfo.getUserId());
         isUserBypassAllTrigger = byPass.ByPassTR__c;
         isUserBypassAllVR = byPass.ByPassVR__c;
         User usr = [SELECT byPassTriggers__c from User WHERE id = :UserInfo.getUserId() LIMIT 1];
@@ -24,7 +24,7 @@ public class Bypass_UTL {
     public static boolean isTriggerDisabled(string trgName) {
         return (isBypassAllTrigger || isUserBypassAllTrigger || isUserBypassSpecificTrigger.contains(trgName));
     }
-    public static boolean isValidationRuleDisabled(string trgName) {
+    public static boolean isValidationRuleDisabled() {
         return (isUserBypassAllVR);
     }
 }

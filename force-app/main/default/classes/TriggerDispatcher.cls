@@ -14,7 +14,7 @@ public class TriggerDispatcher {
         if (handler instanceof IValidable) {
             IValidable validable = (IValidable) handler;
 
-            if (TriggerBypass_URL.isValidationRuleDisabled()) {
+            if (Bypass_UTL.isValidationRuleDisabled()) {
                 if (Trigger.IsBefore) {
                     if (Trigger.IsInsert) {
                         triggerNew = validable.ValidateInsert(trigger.new);
@@ -26,34 +26,36 @@ public class TriggerDispatcher {
             }
         }
         String trgName = String.valueOf(handler).split(':')[0];
-        if(TriggerBypass_URL.isTriggerDisabled(trgName)) {
+        if(Bypass_UTL.isTriggerDisabled(trgName)) {
             return;
         }
 
         dictionnary = handler.LoadData ();
+        Map<String, APipelineItem> pipelines = handler.CreatePipelines(dictionnary);
+
         if (Trigger.IsBefore) {
             if (Trigger.IsInsert) {
-                handler.BeforeInsert(triggerNew, dictionnary);
+                handler.BeforeInsert(triggerNew, dictionnary, pipelines);
             }
             else if (Trigger.IsUpdate) {
-                handler.BeforeUpdate(triggerNewMap, trigger.oldMap, dictionnary);
+                handler.BeforeUpdate(triggerNewMap, trigger.oldMap, dictionnary, pipelines);
             }
             else if (Trigger.IsDelete) {
-                handler.BeforeDelete(trigger.oldMap, dictionnary);
+                handler.BeforeDelete(trigger.oldMap, dictionnary, pipelines);
             }
         }
         if (Trigger.IsAfter) {
             if (Trigger.IsInsert) {
-                handler.AfterInsert(Trigger.newMap, dictionnary);
+                handler.AfterInsert(Trigger.newMap, dictionnary, pipelines);
             }
             else if (Trigger.IsUpdate) {
-                handler.AfterUpdate(trigger.newMap, trigger.oldMap, dictionnary);
+                handler.AfterUpdate(trigger.newMap, trigger.oldMap, dictionnary, pipelines);
             }
             else if (trigger.IsDelete) {
-                handler.AfterDelete(trigger.oldMap, dictionnary);
+                handler.AfterDelete(trigger.oldMap, dictionnary, pipelines);
             }
             else if (trigger.isUndelete) {
-                handler.AfterUndelete(trigger.oldMap, dictionnary);
+                handler.AfterUndelete(trigger.oldMap, dictionnary, pipelines);
             }
         }
     }
