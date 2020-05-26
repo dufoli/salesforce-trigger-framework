@@ -6,7 +6,7 @@ public class AccountTriggerHandler implements ITriggerHandler {
     }
     //todo check if we can use generic
     public class TaskMgr extends APipelineItem {
-        TaskMgr(Map<String, List<Object>> dico) {
+        TaskMgr(Map<String, List<SObject>> dico) {
             super(dico);
         }
         TaskMgr createTask() {
