@@ -1,5 +1,7 @@
 # salesforce-trigger-framework
 
+* STATUS : WORK IN PROGRESS
+
 <p>Here we have a framework which deal with performance issue we face in Salesforce and avoid worst antipattern:
 <ol>
 <li>SOQL in loop</li>
@@ -16,4 +18,8 @@
 	<li>Create a trigger for your object (all events). and call the static TriggerDispatcher.Run method with first parameter : a new TriggerHandler</li>
 </ol>
 
-You can implements IValidable to handle validation rules on trigger side.
+TODO : 
+* doc for IValidable to handle validation rules on trigger side.
+* rename pipeline to objectWriter
+* find a way to limit to one object writer by object (best is to use generics and SObjecType for that or a name function of APipelineItem)
+* make an full example of dependant pipeline
