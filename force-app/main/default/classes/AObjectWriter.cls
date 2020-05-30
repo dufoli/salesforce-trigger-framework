@@ -1,14 +1,14 @@
-public abstract class APipelineItem {
+public abstract class AObjectWriter {
     protected List<SObject> toInsert;
     protected List<SObject> toUpdate;
     //TODO delete/undelete ?
     //todo Rename to ObjectWriter
     private Map<String, List<SObject>> dico;
-    
-    public APipelineItem (Map<String, List<SObject>> dico) {
+
+    public AObjectWriter (Map<String, List<SObject>> dico) {
         this.dico = dico;
     }
-    
+
     public void Write () {
     //ppulate dico so other pipeline can used it.
     String name = String.valueOf(this).split(':')[0];

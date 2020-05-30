@@ -1,11 +1,11 @@
-public class AccountTriggerHandler implements ITriggerHandler {
-    public Map<String, APipelineItem> CreatePipelines(Map<String, List<SObject>> dico) {
-        Map<String, APipelineItem> pipelines = new Map<String, APipelineItem> ();
+public class AccountTriggerHandler implements ITriggerHandler, IValidable {
+    public Map<String, AObjectWriter> CreatePipelines(Map<String, List<SObject>> dico) {
+        Map<String, AObjectWriter> pipelines = new Map<String, AObjectWriter> ();
         pipelines.put('Task', new TaskMgr(dico));
         return pipelines;
     }
     //todo check if we can use generic
-    public class TaskMgr extends APipelineItem {
+    public class TaskMgr extends AObjectWriter {
         TaskMgr(Map<String, List<SObject>> dico) {
             super(dico);
         }
@@ -20,6 +20,23 @@ public class AccountTriggerHandler implements ITriggerHandler {
             return this;
         }
     }
+    public void ValidateInsert (List<SObject> newItems) {
+        //TODO implement an example
+    }
+    public void ValidateUpdate (Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {
+        // LOAD HERE ALL Data  needed for validation of records bulkified way
+        for (SObject obj : newItems.values()) {
+            Account acc = (Account) obj;
+            Account old = (Account) oldItems.get(acc.Id);
+            //block name modification of client
+            // use acc.Name.addError to link error to field Name
+            // use acc.addError to add error on UI header linked to record
+            if (acc.Name != old.Name) {
+                acc.Name.addError('Name can not been changed');
+            }
+        }
+    }
+
     public Map<String, List<SObject>> LoadData () {
         // here we load all SOQL/ SOSL for service class
         // populate dictionnary
