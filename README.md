@@ -51,7 +51,8 @@ TODO :
 [ ] support undelete for IValidable
 [ ] find a way to limit to one object writer by object (best is to use generics and SObjecType for that or a name function of APipelineItem)
 [ ] make an full example of dependant pipeline
-[ ] provide best practice to avoid static method in service class which is very ugly but used by most of Salesforce project.
+[ ] try to load all subclass dependant witch implement AObjectWriter
+[ ] provide best practice to avoid static method in service class... Nobody heard of factory on salesforce obviously ;-)
 [ ] TODO Salesforce runs user-defined validation rules if multiline items were created, such as quote line items and opportunity line items.
 [ ] TODO If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
 
@@ -63,9 +64,20 @@ creation of case
 - if not found create client and add accountid to case
 
 pipeline
-1 search for account
-2 create missing account
-3 produce a common list of accountid to map to case
-4 set up accountid on case
+1 search for account ==> LoadData()
+2 create missing account ==> AccountObjectWriter
+3 produce a common list of accountid to map to case ==> current implement provide 2 lists in dictionnary. Is it an issue ?
+4 set up accountid on case ==> a classic service function with dictionnary as param will set case.Accountid
 5 write
+
+data exchange on pipeline must be :
+loaded data (dictionnary) from init
++ structured data from previous steps
+I plan to reuse dictionnary to forward structured data
+
+TO THINK:
+Use ObjectWriter class on earch TriggerHandler will avoid spagetti code with because same object will use same subclass
+but how to garanty that we do not write 2 ObjectWrite for same object ? That is the bug question.
+Not so happy of CreatePipelines, is really needed ? we can just make a new instance when needed in afterUpdate afterInsert
+Can we force that before is only to normalyze record and after must been used to write DML
 

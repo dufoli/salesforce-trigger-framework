@@ -42,6 +42,7 @@ public class AccountTriggerHandler implements ITriggerHandler, IValidable {
         // populate dictionnary
         Map<String, List<SObject>> dico = new Map<String, List<SObject>>();
         //example of user dico
+        // you can user trigger.IsUpdate and trigger.IsInsert to have different list depending of insert or update
         dico.put(User.sObjectType.getDescribe().getName(), [Select Id from User LIMIT 1]);
         return dico;
     }

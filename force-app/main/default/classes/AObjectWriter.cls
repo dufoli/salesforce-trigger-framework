@@ -10,7 +10,7 @@ public abstract class AObjectWriter {
     }
 
     public void Write () {
-    //ppulate dico so other pipeline can used it.
+    //populate dico so other pipeline can used it.
     String name = String.valueOf(this).split(':')[0];
         if (toInsert.size() >0) {
             insert toInsert;
