@@ -1,3 +1,8 @@
+/*
+* @description Account trigger handler example test
+* @author: Olivier Dufour
+* @date May 22, 2020
+*/
 @isTest
 private class AccountTriggerHandler_TST {
     @isTest

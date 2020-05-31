@@ -1,3 +1,8 @@
+/*
+* @description Account trigger handler example
+* @author: Olivier Dufour
+* @date May 22, 2020
+*/
 public class AccountTriggerHandler implements ITriggerHandler, IValidable {
     public Map<String, AObjectWriter> CreatePipelines(Map<String, List<SObject>> dico) {
         Map<String, AObjectWriter> pipelines = new Map<String, AObjectWriter> ();

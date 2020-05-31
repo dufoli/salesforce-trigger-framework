@@ -1,3 +1,8 @@
+/*
+* @description Object writer
+* @author: Olivier Dufour
+* @date May 22, 2020
+*/
 public abstract class AObjectWriter {
     protected List<SObject> toInsert;
     protected List<SObject> toUpdate;
