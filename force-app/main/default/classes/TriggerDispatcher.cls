@@ -53,7 +53,9 @@ public class TriggerDispatcher {
             else if (trigger.isUndelete) {
                 handler.AfterUndelete(trigger.oldMap, dictionnary, pipelines);
             }
+            SObjectType triggerType = trigger.isDelete ?  trigger.old.getSObjectType() : trigger.new.getSObjectType();
+            List<SObject> objs = trigger.isDelete ?  trigger.old : trigger.new;
+            RollupSummary_UTL.refreshRollupSummary (triggerType, objs);
         }
-
     }
 }

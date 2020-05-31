@@ -64,7 +64,7 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] rename pipeline to AObjectWriter
 - [x] respect order of execution https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_triggers_order_of_execution.htm for VR trigger
 - [x] Rollup summary framework
-- [x] Rollup summary test class
+- [ ] Rollup summary test class
 - [ ] support undelete for IValidable
 - [ ] find a way to limit to one object writer by object (best is to use generics and SObjecType for that or a name function of APipelineItem)
 - [ ] make an full example of dependant pipeline

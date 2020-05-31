@@ -35,10 +35,14 @@ public class RollupSummary_UTL {
         // Fill rollup definition here
     }
 
-    public static void refreshRollupSummary (String ObjectType, Set<Id> ids) {
+    public static void refreshRollupSummary (String ObjectType, List<SObject> objs) {
         List<RollupDefinition> defs = rollupDefinitions.get(ObjectType);
         if (defs != null && defs.size() > 0) {
             for (RollupDefinition def : defs) {
+                Set<Id> ids = new Set<Id> ();
+                for (Sobject obj : objs) {
+                    ids.add((Id)obj.get(def.childParentId));
+                }
                 refreshRollupSummary(def.childObject, def.childField, def.childParentId,
                     def.aggregation, def.filter, def.parentAggregateField, def.parentObject, ids);
             }
