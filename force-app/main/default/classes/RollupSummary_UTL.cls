@@ -3,19 +3,19 @@
 * @author: Olivier Dufour
 * @date May 22, 2020
 */
-public class RollupSummary_UTL {
+global class RollupSummary_UTL {
 
     private class RollupDefinition {
         //TODO make getters and private properties
         public string childObject;
         public string childField;
         public string childParentId;
-        public DataSource.QueryAggregation aggregation;
+        public integer aggregation;
         public string filter;
         public string parentAggregateField;
         public string parentObject;
         public RollupDefinition(string childObject, string childField,
-        string childParentId, DataSource.QueryAggregation aggregation,
+        string childParentId, integer aggregation,
         string filter,
         string parentAggregateField, string parentObject) {
             this.childObject = childObject;
@@ -27,8 +27,15 @@ public class RollupSummary_UTL {
             this.parentObject = parentObject;
         }
     }
+    global static final integer aggregationCount = 1;
+    global static final integer aggregationAvg = 2;
+    global static final integer aggregationSum = 3;
+    global static final integer aggregationMax = 4;
+    global static final integer aggregationMin = 5;
+    // enum not supported in future method
+
     //DataSource.QueryAggregation.COUNT
-    private Map<String, List<RollupDefinition>> rollupDefinitions;
+    private static Map<String, List<RollupDefinition>> rollupDefinitions;
 
     static {
         rollupDefinitions = new Map<String, List<RollupDefinition>> ();
@@ -43,14 +50,14 @@ public class RollupSummary_UTL {
                 for (Sobject obj : objs) {
                     ids.add((Id)obj.get(def.childParentId));
                 }
-                refreshRollupSummary(def.childObject, def.childField, def.childParentId,
+                asyncrefreshRollupSummary(def.childObject, def.childField, def.childParentId,
                     def.aggregation, def.filter, def.parentAggregateField, def.parentObject, ids);
             }
         }
     }
     @future
-    public static void refreshRollupSummary(string childObject, string childField,
-        string childParentId, DataSource.QueryAggregation aggregation,
+    public static void asyncrefreshRollupSummary(string childObject, string childField,
+        string childParentId, integer aggregation,
         string filter,
         string parentAggregateField, string parentObject, Set<Id> ids) {
         // calculate aggregate of childs
@@ -60,29 +67,22 @@ public class RollupSummary_UTL {
             return;
         }
         query += childParentId + ', ';
-        switch on aggregation {
-            WHEN DataSource.QueryAggregation.COUNT {
+        if (aggregation == RollupSummary_UTL.aggregationCount) {
                 query += 'COUNT(';
-            }
-            WHEN DataSource.QueryAggregation.AVG {
-                query += 'AVG(';
-            }
-            WHEN DataSource.QueryAggregation.MAX {
-                query += 'MAX(';
-            }
-            WHEN DataSource.QueryAggregation.MIN {
-                query += 'MIN(';
-            }
-            WHEN DataSource.QueryAggregation.SUM {
-                query += 'SUM(';
-            }
-            WHEN else {
-                System.debug('none is not allowed');
-                return;
-            }
+        } else if (aggregation == RollupSummary_UTL.aggregationAvg) {
+            query += 'AVG(';
+        } else if (aggregation == RollupSummary_UTL.aggregationMax) {
+            query += 'MAX(';
+        } else if (aggregation == RollupSummary_UTL.aggregationMin) {
+            query += 'MIN(';
+        } else if (aggregation == RollupSummary_UTL.aggregationSum) {
+            query += 'SUM(';
+        } else {
+            System.debug('agregation not allower is not allowed');
+            return;
         }
         query += childField + ') agg FROM ' + childObject;
-        query += ' WHERE ' + childParentId + ' IN :ids '
+        query += ' WHERE ' + childParentId + ' IN :ids ';
         if (!string.isBlank(filter)) {
             query += 'AND ' + filter;
         }

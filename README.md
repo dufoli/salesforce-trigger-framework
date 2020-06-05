@@ -66,7 +66,7 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] Rollup summary framework
 - [ ] Rollup summary test class
 - [ ] support undelete for IValidable
-- [ ] find a way to limit to one object writer by object (best is to use generics and SObjecType for that or a name function of APipelineItem)
+- [ ] find a way to limit to one object writer by object else naming convention will be enough
 - [ ] make an full example of dependant pipeline
 - [ ] try to load all subclass dependant witch implement AObjectWriter
 - [ ] provide best practice to avoid static method in service class... Nobody heard of factory on salesforce obviously ;-)
@@ -80,12 +80,14 @@ creation of case
 - if found add accountid to case
 - if not found create client and add accountid to case
 <br>
+
 pipeline
-1 search for account ==> LoadData()
-2 create missing account ==> AccountObjectWriter
-3 produce a common list of accountid to map to case ==> current implement provide 2 lists in dictionnary. Is it an issue ?
-4 set up accountid on case ==> a classic service function with dictionnary as param will set case.Accountid
-5 write
+
+* search for account ==> LoadData()
+* create missing account ==> AccountObjectWriter
+* produce a common list of accountid to map to case ==> current implement provide 2 lists in dictionnary. Is it an issue ?
+* set up accountid on case ==> a classic service function with dictionnary as param will set case.Accountid
+* write
 <br>
 data exchange on pipeline must be :
 loaded data (dictionnary) from init
@@ -95,7 +97,6 @@ I plan to reuse dictionnary to forward structured data
 
 ## TO THINK
 
-- [ ] Use ObjectWriter class on earch TriggerHandler will avoid spagetti code with because same object will use same subclass but how to garanty that we do not write 2 ObjectWriter for same object ?
-- [ ] Not so happy of CreatePipelines, is really needed ? we can just make a new instance when needed in afterUpdate afterInsert
+- [ ] Use ObjectWriter class on earch TriggerHandler will avoid spagetti code with because same object will use same subclass but how to garanty that we do not write 2 ObjectWriter for same object ? by naming convention, I think it is better that splitting all in subfunction and it regroup by object all action
 - [ ] Can we force that before is only to normalyze record and after must been used to write DML
 <br>

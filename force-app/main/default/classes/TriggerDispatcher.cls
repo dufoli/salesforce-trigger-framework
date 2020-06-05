@@ -14,18 +14,17 @@ public class TriggerDispatcher {
         }
 
         dictionnary = handler.LoadData ();
-        Map<String, AObjectWriter> pipelines = handler.CreatePipelines(dictionnary);
 
         if (Trigger.IsBefore) {
             if (Trigger.IsInsert) {
                 // TODO Salesforce runs user-defined validation rules if multiline items were created, such as quote line items and opportunity line items.
-                handler.BeforeInsert(trigger.new, dictionnary, pipelines);
+                handler.BeforeInsert(trigger.new, dictionnary);
             }
             else if (Trigger.IsUpdate) {
-                handler.BeforeUpdate(trigger.newMap, trigger.oldMap, dictionnary, pipelines);
+                handler.BeforeUpdate(trigger.newMap, trigger.oldMap, dictionnary);
             }
             else if (Trigger.IsDelete) {
-                handler.BeforeDelete(trigger.oldMap, dictionnary, pipelines);
+                handler.BeforeDelete(trigger.oldMap, dictionnary);
             }
             if (handler instanceof IValidable) {
                 IValidable validable = (IValidable) handler;
@@ -42,20 +41,20 @@ public class TriggerDispatcher {
         }
         if (Trigger.IsAfter) {
             if (Trigger.IsInsert) {
-                handler.AfterInsert(Trigger.newMap, dictionnary, pipelines);
+                handler.AfterInsert(Trigger.newMap, dictionnary);
             }
             else if (Trigger.IsUpdate) {
-                handler.AfterUpdate(trigger.newMap, trigger.oldMap, dictionnary, pipelines);
+                handler.AfterUpdate(trigger.newMap, trigger.oldMap, dictionnary);
             }
             else if (trigger.IsDelete) {
-                handler.AfterDelete(trigger.oldMap, dictionnary, pipelines);
+                handler.AfterDelete(trigger.oldMap, dictionnary);
             }
             else if (trigger.isUndelete) {
-                handler.AfterUndelete(trigger.oldMap, dictionnary, pipelines);
+                handler.AfterUndelete(trigger.oldMap, dictionnary);
             }
             SObjectType triggerType = trigger.isDelete ?  trigger.old.getSObjectType() : trigger.new.getSObjectType();
             List<SObject> objs = trigger.isDelete ?  trigger.old : trigger.new;
-            RollupSummary_UTL.refreshRollupSummary (triggerType, objs);
+            RollupSummary_UTL.refreshRollupSummary (triggerType.getDescribe().getName(), objs);
         }
     }
 }
