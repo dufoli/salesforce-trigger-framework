@@ -66,8 +66,20 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] Rollup summary framework
 - [x] Rollup summary test class
 - [x] trigger framework test class
-- [ ] support undelete for IValidable, is it really needed ?
-- [ ] provide best practice to avoid static method in service class... Nobody heard of factory on salesforce obviously ;-)
+- [x] rollup: avoid soql on parent just new Parent with id and agg field then update
+- [ ] rollup: count disctinct
+- [ ] rollup: calculate multiple agregate at the same time (multiple alias mapping)
+- [ ] rollup: use String.format() with pattern {0} to set value
+- [ ] rollup: try to find object from dico first if found
+- [ ] rollup: user type instead of string (apexType.newSobject(parentId), apexType.getName()) but stuck with future method
+- [ ] rollup: think if switch future method to queueable ? work with complexe type so we can work with type instead of string
+- [ ] trigger: util isChanged to compare old and new value
+- [ ] trigger: switch dico + new/old to context and add few things (like state Map to pass data between function)
+- [ ] trigger: bloc double run
+- [ ] trigger: add a write all objectwriter not written at the end (so store if write or not) with a boolean
+- [ ] trigger: store all objectWriter in context => by SObjectType
+- [ ] Validation: support undelete for IValidable, is it really needed ?
+- [ ] provide best practice to avoid static method in service class... factory is the best
 - [ ] TODO Salesforce runs user-defined validation rules if multiline items were created, such as quote line items and opportunity line items.
 - [ ] TODO If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
 <br>

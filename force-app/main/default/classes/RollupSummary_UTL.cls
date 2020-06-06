@@ -105,16 +105,20 @@ global class RollupSummary_UTL {
         AggregateResult[] groupedResults = Database.query(query);
         //TODO merge SOQL to have a single query if possible
         // load parent object
-        query = 'SELECT Id, ' + parentAggregateField + ' FROM ' + parentObject + ' WHERE Id IN :ids';
-        system.debug('AGGREGATE query parent :' + query);
-        List<SObject> objs = Database.query(query);
-        for (SObject obj : objs) {
-            string parentId = (string)obj.get('Id');
+        System.Type t = Type.forName(parentObject);
+        //query = 'SELECT Id, ' + parentAggregateField + ' FROM ' + parentObject + ' WHERE Id IN :ids';
+        //system.debug('AGGREGATE query parent :' + query);
+        //List<SObject> objs = Database.query(query);
+        List<SObject> objs = new List<SObject>();
+        for (string parentId : ids) {
             for (AggregateResult ar : groupedResults)  {
                 String objId = (String)ar.get(childParentId);
                 Object agg = ar.get('agg');
                 if (objId == parentId) {
-                    obj.put(parentAggregateField, agg);
+                    SObject sobj = (SObject)t.newInstance();
+                    sobj.put('Id', parentId);
+                    sobj.put(parentAggregateField, agg);
+                    objs.add(sobj);
                 }
             }
         }
