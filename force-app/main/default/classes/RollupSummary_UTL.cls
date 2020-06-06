@@ -32,6 +32,7 @@ global class RollupSummary_UTL {
     global static final integer aggregationSum = 3;
     global static final integer aggregationMax = 4;
     global static final integer aggregationMin = 5;
+    global static final integer aggregationCountDistinct = 6;
     // enum not supported in future method
     // so can not used DataSource.QueryAggregation.COUNT
 
@@ -91,6 +92,8 @@ global class RollupSummary_UTL {
             query += 'MIN(';
         } else if (aggregation == RollupSummary_UTL.aggregationSum) {
             query += 'SUM(';
+        } else if (aggregation == RollupSummary_UTL.aggregationCountDistinct) {
+            query += 'COUNT_DISTINCT(';
         } else {
             System.debug('agregation not allower is not allowed');
             return;
