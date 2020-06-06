@@ -64,21 +64,21 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] rename pipeline to AObjectWriter
 - [x] respect order of execution https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_triggers_order_of_execution.htm for VR trigger
 - [x] Rollup summary framework
-- [ ] Rollup summary test class
-- [ ] support undelete for IValidable
-- [ ] find a way to limit to one object writer by object else naming convention will be enough
-- [ ] make an full example of dependant pipeline
-- [ ] try to load all subclass dependant witch implement AObjectWriter
+- [x] Rollup summary test class
+- [x] trigger framework test class
+- [ ] support undelete for IValidable, is it really needed ?
 - [ ] provide best practice to avoid static method in service class... Nobody heard of factory on salesforce obviously ;-)
 - [ ] TODO Salesforce runs user-defined validation rules if multiline items were created, such as quote line items and opportunity line items.
 - [ ] TODO If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
 <br>
 <br>
 A good example to dig in:<br>
-creation of case
+creation of case<br>
+
 - look for account with same email
 - if found add accountid to case
 - if not found create client and add accountid to case
+
 <br>
 
 pipeline

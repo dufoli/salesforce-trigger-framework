@@ -1,5 +1,5 @@
 /*
-* @description Object writer (builder pattern)
+* @description Object writer
 * @author: Olivier Dufour
 * @date May 22, 2020
 */
@@ -12,6 +12,8 @@ public abstract class AObjectWriter {
 
     public AObjectWriter (Map<String, List<SObject>> dico) {
         this.dico = dico;
+        this.toInsert = new List<SObject> ();
+        this.toUpdate = new List<SObject> ();
     }
 
     public List<SObject> getAll(){

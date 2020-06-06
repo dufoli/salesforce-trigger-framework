@@ -15,8 +15,11 @@ public class AccountTriggerHandler implements ITriggerHandler, IValidable {
                 t.WhatId = acc.Id;
                 toInsert.add(t);
             }
-            for (Sobject t : dico.get('Task')) {
-                toUpdate.add(t);
+            List<Task> tt = dico.get('Task');
+            if (tt != null) {
+                for (Sobject t : tt) {
+                    toUpdate.add(t);
+                }
             }
         }
         TaskMgr setDefautPriority() {
@@ -70,9 +73,6 @@ public class AccountTriggerHandler implements ITriggerHandler, IValidable {
     public void BeforeDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
 
     public void AfterInsert(Map<Id, SObject> newItems, Map<String, List<SObject>> dictionnary) {
-        // call service class and try to avoid SOQL inside them and do it in loadData
-        //AnInsertHandler ((Account[])newItems, dictionnary);
-        //AnOtherInsertHandler ((Account[])newItems, dictionnary);
         (new TaskMgr(newItems, dictionnary)).setDefautPriority().setDefaultSubject().Write();
     }
 

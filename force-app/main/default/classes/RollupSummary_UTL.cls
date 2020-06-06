@@ -33,8 +33,8 @@ global class RollupSummary_UTL {
     global static final integer aggregationMax = 4;
     global static final integer aggregationMin = 5;
     // enum not supported in future method
+    // so can not used DataSource.QueryAggregation.COUNT
 
-    //DataSource.QueryAggregation.COUNT
     private static Map<String, List<RollupDefinition>> rollupDefinitions;
 
     static {
@@ -42,7 +42,20 @@ global class RollupSummary_UTL {
         // Fill rollup definition here
     }
 
+    public static void registerRollupDefinition (string childObject, string childField,
+        string childParentId, integer aggregation, string filter,
+        string parentAggregateField, string parentObject) {
+        List<RollupDefinition> l = rollupDefinitions.get (childObject);
+        if (l == null) {
+            l = new List<RollupDefinition> ();
+            rollupDefinitions.put (childObject, l);
+        }
+        RollupDefinition r = new RollupDefinition(childObject, childField, childParentId,  aggregation, filter, parentAggregateField, parentObject);
+        l.add (r);
+    }
+
     public static void refreshRollupSummary (String ObjectType, List<SObject> objs) {
+        system.debug('refreshRollupSummary started on '+ ObjectType);
         List<RollupDefinition> defs = rollupDefinitions.get(ObjectType);
         if (defs != null && defs.size() > 0) {
             for (RollupDefinition def : defs) {
@@ -50,6 +63,7 @@ global class RollupSummary_UTL {
                 for (Sobject obj : objs) {
                     ids.add((Id)obj.get(def.childParentId));
                 }
+                system.debug('refreshRollupSummary async call');
                 asyncrefreshRollupSummary(def.childObject, def.childField, def.childParentId,
                     def.aggregation, def.filter, def.parentAggregateField, def.parentObject, ids);
             }
@@ -57,10 +71,10 @@ global class RollupSummary_UTL {
     }
     @future
     public static void asyncrefreshRollupSummary(string childObject, string childField,
-        string childParentId, integer aggregation,
-        string filter,
+        string childParentId, integer aggregation, string filter,
         string parentAggregateField, string parentObject, Set<Id> ids) {
         // calculate aggregate of childs
+        system.debug('AGGREGATE started');
         String query = 'SELECT ';
         if (string.isBlank(childParentId)) {
             system.debug('group field is mandatory');
@@ -87,11 +101,12 @@ global class RollupSummary_UTL {
             query += 'AND ' + filter;
         }
         query += 'GROUP BY ' + childParentId;
-
+        system.debug('AGGREGATE query :' + query);
         AggregateResult[] groupedResults = Database.query(query);
         //TODO merge SOQL to have a single query if possible
         // load parent object
         query = 'SELECT Id, ' + parentAggregateField + ' FROM ' + parentObject + ' WHERE Id IN :ids';
+        system.debug('AGGREGATE query parent :' + query);
         List<SObject> objs = Database.query(query);
         for (SObject obj : objs) {
             string parentId = (string)obj.get('Id');
@@ -103,6 +118,9 @@ global class RollupSummary_UTL {
                 }
             }
         }
-        update objs;
+        if (objs.size() > 0) {
+            update objs;
+        }
+        system.debug('AGGREGATE finished');
     }
 }

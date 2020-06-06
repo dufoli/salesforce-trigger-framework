@@ -29,7 +29,7 @@ public class TriggerDispatcher {
             if (handler instanceof IValidable) {
                 IValidable validable = (IValidable) handler;
                 //TODO If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
-                if (Bypass_UTL.isValidationRuleDisabled()) {
+                if (!Bypass_UTL.isValidationRuleDisabled()) {
                     if (Trigger.IsInsert) {
                         validable.ValidateInsert(trigger.new);
                     }
