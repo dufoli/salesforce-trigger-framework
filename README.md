@@ -68,6 +68,7 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] trigger framework test class
 - [x] rollup: avoid soql on parent just new Parent with id and agg field then update
 - [x] rollup: count disctinct
+- [ ] Validation: support programatic bypass like trigger part
 - [ ] rollup: calculate multiple agregate at the same time (multiple alias mapping)
 - [ ] rollup: use String.format() with pattern {0} to set value
 - [ ] rollup: try to find object from dico first if found
