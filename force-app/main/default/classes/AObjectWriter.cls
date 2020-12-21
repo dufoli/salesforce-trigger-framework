@@ -6,9 +6,10 @@
 public abstract class AObjectWriter {
     protected List<SObject> toInsert;
     protected List<SObject> toUpdate;
-    //TODO delete/undelete ?
-    //todo Rename to ObjectWriter
-    private Map<String, List<SObject>> dico;
+    protected Map<String, List<SObject>> dico;
+    protected List<Database.SaveResult> inputs;
+    AObjectWriter reject;
+    AObjectWriter next;
 
     public AObjectWriter (Map<String, List<SObject>> dico) {
         this.dico = dico;
@@ -22,16 +23,42 @@ public abstract class AObjectWriter {
         return l;
     }
 
-    public void Write () {
-    //populate dico so other pipeline can used it.
-    String name = String.valueOf(this).split(':')[0];
+    public addInput (Database.SaveResult r) {
+        inputs.add(r);
+    }
+
+    public AObjectWriter resolve () {
+        String name = String.valueOf(this).split(':')[0];
         if (toInsert.size() >0) {
-            insert toInsert;
-            dico.put(name+'Insert', toInsert);
+            Database.SaveResult[] srList = Database.insert(toInsert, false);
+            for (Database.SaveResult r : srList) {
+                if (!r.isSuccess()) {
+                    reject.addInput(r);
+                } else {
+                    next.addInput(r);
+                }
+            }
         }
         if (toUpdate.size() >0) {
-            update toUpdate;
-            dico.put(name+'Update', toUpdate);
+            Database.SaveResult[] srList = Database.update(toUpdate, false);
+            for (Database.SaveResult r : srList) {
+                if (!r.isSuccess()) {
+                    reject.addInput(r);
+                } else {
+                    next.addInput(r);
+                }
+            }
         }
+        next.resolve ();
+        reject.resolve ();
+        return this;
+    }
+    public AObjectWriter onSucceed(AObjectWriter next) {
+        this.next = next;
+        return this;
+    }
+    public AObjectWriter onFailed(AObjectWriter reject) {
+        this.reject = reject;
+        return this;
     }
 }
