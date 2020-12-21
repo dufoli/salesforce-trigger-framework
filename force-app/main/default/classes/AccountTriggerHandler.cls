@@ -63,34 +63,35 @@ public class AccountTriggerHandler implements ITriggerHandler, IValidable {
         }
     }
 
-    public Map<String, List<SObject>> LoadData () {
+    public TriggerContext LoadData () {
         // here we load all SOQL/ SOSL for service class
         // populate dictionnary
-        Map<String, List<SObject>> dico = new Map<String, List<SObject>>();
+        TriggerContext ctx = new TriggerContext();
+        Map<String, List<SObject>> dico = ctx.getData();
         //example of user dico
         // you can user trigger.IsUpdate and trigger.IsInsert to have different list depending of insert or update
         dico.put(User.sObjectType.getDescribe().getName(), [Select Id from User LIMIT 1]);
-        return dico;
+        return ctx;
     }
 
-    public void BeforeInsert(List<SObject> newItems, Map<String, List<SObject>> dictionnary) {
-
-    }
-
-    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {
+    public void BeforeInsert(List<SObject> newItems, TriggerContext ctx) {
 
     }
 
-    public void BeforeDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, TriggerContext ctx) {
 
-    public void AfterInsert(Map<Id, SObject> newItems, Map<String, List<SObject>> dictionnary) {
-        (new TaskMgr(newItems, dictionnary)).setDefautPriority().setDefaultSubject().Write();
     }
 
-    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void BeforeDelete(Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
-    public void AfterDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterInsert(Map<Id, SObject> newItems, TriggerContext ctx) {
+        (new TaskMgr(newItems, ctx.getData())).setDefautPriority().setDefaultSubject().Write();
+    }
 
-    public void AfterUndelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, TriggerContext ctx) {}
+
+    public void AfterDelete(Map<Id, SObject> oldItems, TriggerContext ctx) {}
+
+    public void AfterUndelete(Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
 }

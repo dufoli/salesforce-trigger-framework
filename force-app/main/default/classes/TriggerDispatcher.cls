@@ -18,13 +18,13 @@ public class TriggerDispatcher {
         if (Trigger.IsBefore) {
             if (Trigger.IsInsert) {
                 // TODO Salesforce runs user-defined validation rules if multiline items were created, such as quote line items and opportunity line items.
-                handler.BeforeInsert(trigger.new, dictionnary);
+                handler.BeforeInsert(Trigger.new, dictionnary);
             }
             else if (Trigger.IsUpdate) {
-                handler.BeforeUpdate(trigger.newMap, trigger.oldMap, dictionnary);
+                handler.BeforeUpdate(Trigger.newMap, Trigger.oldMap, dictionnary);
             }
             else if (Trigger.IsDelete) {
-                handler.BeforeDelete(trigger.oldMap, dictionnary);
+                handler.BeforeDelete(Trigger.oldMap, dictionnary);
             }
             if (handler instanceof IValidable) {
                 IValidable validable = (IValidable) handler;
@@ -33,10 +33,10 @@ public class TriggerDispatcher {
                     return;
                 }
                 if (Trigger.IsInsert) {
-                    validable.ValidateInsert(trigger.new);
+                    validable.ValidateInsert(Trigger.new);
                 }
                 if (Trigger.isUpdate) {
-                    validable.ValidateUpdate(trigger.newMap, trigger.oldMap);
+                    validable.ValidateUpdate(Trigger.newMap, Trigger.oldMap);
                 }
             }
         }
@@ -45,17 +45,39 @@ public class TriggerDispatcher {
                 handler.AfterInsert(Trigger.newMap, dictionnary);
             }
             else if (Trigger.IsUpdate) {
-                handler.AfterUpdate(trigger.newMap, trigger.oldMap, dictionnary);
+                handler.AfterUpdate(Trigger.newMap, Trigger.oldMap, dictionnary);
             }
-            else if (trigger.IsDelete) {
-                handler.AfterDelete(trigger.oldMap, dictionnary);
+            else if (Trigger.IsDelete) {
+                handler.AfterDelete(Trigger.oldMap, dictionnary);
             }
-            else if (trigger.isUndelete) {
-                handler.AfterUndelete(trigger.oldMap, dictionnary);
+            else if (Trigger.isUndelete) {
+                handler.AfterUndelete(Trigger.oldMap, dictionnary);
             }
-            SObjectType triggerType = trigger.isDelete ?  trigger.old.getSObjectType() : trigger.new.getSObjectType();
-            List<SObject> objs = trigger.isDelete ?  trigger.old : trigger.new;
+            SObjectType triggerType = Trigger.isDelete ?  Trigger.old.getSObjectType() : Trigger.new.getSObjectType();
+            List<SObject> objs = Trigger.isDelete ?  Trigger.old : Trigger.new;
             RollupSummary_UTL.refreshRollupSummary (triggerType.getDescribe().getName(), objs);
         }
+    }
+    public static List<SObject> getChangedFieldList (string fieldName) {
+        List<SObject> filtered = new List<SObject> ();
+         for (Integer i = 0; i < Trigger.old.size(); i++) {
+            SObject old = Trigger.old[i];
+            SObject nw = Trigger.new[i];
+            if (old.get(fieldName) != nw.get(fieldName)) {
+                filtered.add(nw);
+            }
+        }
+        return filtered;
+    }
+    public static Map<Id, SObject> getChangedFieldMap (string fieldName) {
+        Map<Id, SObject> filtered = new Map<Id, SObject> ();
+         for (Integer i = 0; i < Trigger.old.size(); i++) {
+            SObject old = Trigger.old[i];
+            SObject nw = Trigger.new[i];
+            if (old.get(fieldName) != nw.get(fieldName)) {
+                filtered.put(nw.Id, nw);
+            }
+        }
+        return filtered;
     }
 }

@@ -75,8 +75,8 @@ rem: you can implement common rules for update and insert in same function and c
 - [ ] rollup: user type instead of string (apexType.newSobject(parentId), apexType.getName()) but stuck with future method
 - [ ] rollup: think if switch future method to queueable ? work with complexe type so we can work with type instead of string
 - [ ] rollup: write rollup at same time than objectWriter when possible
-- [ ] trigger: util isChanged to compare old and new value
-- [ ] trigger: switch dico + new/old to context and add few things (like state Map to pass data between function)
+- [x] trigger: util isChanged to compare old and new value
+- [x] trigger: switch dico + new/old to context and add few things (like state Map to pass data between function)
 - [ ] trigger: bloc double run
 - [ ] trigger: add a write all objectwriter not written at the end (so store if write or not) with a boolean
 - [ ] trigger: store all objectWriter in context => by SObjectType

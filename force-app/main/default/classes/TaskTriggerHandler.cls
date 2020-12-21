@@ -9,20 +9,20 @@ public class TaskTriggerHandler implements ITriggerHandler {
 
     public Boolean isDisabled() { return triggerDisabled; }
 
-    public Map<String, List<SObject>> LoadData () { return new Map<String, List<SObject>> ();}
+    public TriggerContext LoadData () { return new TriggerContext();}
 
-    public void BeforeInsert(List<SObject> newItems, Map<String, List<SObject>> dictionnary) {}
+    public void BeforeInsert(List<SObject> newItems, TriggerContext ctx) {}
 
-    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
-    public void BeforeDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void BeforeDelete(Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
-    public void AfterInsert(Map<Id, SObject> newItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterInsert(Map<Id, SObject> newItems, TriggerContext ctx) {}
 
-    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
-    public void AfterDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterDelete(Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
-    public void AfterUndelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dictionnary) {}
+    public void AfterUndelete(Map<Id, SObject> oldItems, TriggerContext ctx) {}
 
 }

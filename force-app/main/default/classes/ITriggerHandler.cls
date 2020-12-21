@@ -4,21 +4,21 @@
 * @date May 22, 2020
 */
 public interface ITriggerHandler {
-  Map<String, List<SObject>> LoadData ();
+  TriggerContext LoadData ();
 
   Boolean isDisabled();
 
-  void BeforeInsert(SObject[] newItems, Map<String, List<SObject>> dico);
+  void BeforeInsert(SObject[] newItems, TriggerContext ctx);
 
-  void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dico);
+  void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, TriggerContext ctx);
 
-  void BeforeDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dico);
+  void BeforeDelete(Map<Id, SObject> oldItems, TriggerContext ctx);
 
-  void AfterInsert(Map<Id, SObject> newItems, Map<String, List<SObject>> dico);
+  void AfterInsert(Map<Id, SObject> newItems, TriggerContext ctx);
 
-  void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dico);
+  void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, TriggerContext ctx);
 
-  void AfterDelete(Map<Id, SObject> oldItems, Map<String, List<SObject>> dico);
+  void AfterDelete(Map<Id, SObject> oldItems, TriggerContext ctx);
 
-  void AfterUndelete(Map<Id, SObject> newItems, Map<String, List<SObject>> dico);
+  void AfterUndelete(Map<Id, SObject> newItems, TriggerContext ctx);
 }
