@@ -4,6 +4,17 @@
 * @date May 22, 2020
 */
 public class AccountTriggerHandler implements ITriggerHandler, IValidable {
+
+    public static Boolean triggerDisabled = false;
+    public static Boolean validationDisabled = false;
+
+    public Boolean isDisabled() {
+        return triggerDisabled;
+    }
+
+    public Boolean isValidationDisabled() {
+        return validationDisabled;
+    }
     //todo check if we can use generic
     public class TaskMgr extends AObjectWriter {
         TaskMgr(Map<Id, SObject> newItems, Map<String, List<SObject>> dico) {

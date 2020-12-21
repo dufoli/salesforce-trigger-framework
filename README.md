@@ -68,12 +68,13 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] trigger framework test class
 - [x] rollup: avoid soql on parent just new Parent with id and agg field then update
 - [x] rollup: count disctinct
-- [ ] Validation: support programatic bypass like trigger part
+- [x] Validation: support programatic bypass like trigger part
 - [ ] rollup: calculate multiple agregate at the same time (multiple alias mapping)
 - [ ] rollup: use String.format() with pattern {0} to set value
 - [ ] rollup: try to find object from dico first if found
 - [ ] rollup: user type instead of string (apexType.newSobject(parentId), apexType.getName()) but stuck with future method
 - [ ] rollup: think if switch future method to queueable ? work with complexe type so we can work with type instead of string
+- [ ] rollup: write rollup at same time than objectWriter when possible
 - [ ] trigger: util isChanged to compare old and new value
 - [ ] trigger: switch dico + new/old to context and add few things (like state Map to pass data between function)
 - [ ] trigger: bloc double run

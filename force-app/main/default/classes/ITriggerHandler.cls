@@ -6,6 +6,8 @@
 public interface ITriggerHandler {
   Map<String, List<SObject>> LoadData ();
 
+  Boolean isDisabled();
+
   void BeforeInsert(SObject[] newItems, Map<String, List<SObject>> dico);
 
   void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems, Map<String, List<SObject>> dico);

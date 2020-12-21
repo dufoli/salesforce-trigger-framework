@@ -9,7 +9,7 @@ public class TriggerDispatcher {
         Map<String, List<SObject>> dictionnary = new Map<String, List<SObject>> ();
 
         String trgName = String.valueOf(handler).split(':')[0];
-        if(Bypass_UTL.isTriggerDisabled(trgName)) {
+        if(handler.isDisabled() || Bypass_UTL.isTriggerDisabled(trgName)) {
             return;
         }
 
@@ -29,13 +29,14 @@ public class TriggerDispatcher {
             if (handler instanceof IValidable) {
                 IValidable validable = (IValidable) handler;
                 //TODO If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
-                if (!Bypass_UTL.isValidationRuleDisabled()) {
-                    if (Trigger.IsInsert) {
-                        validable.ValidateInsert(trigger.new);
-                    }
-                    if (Trigger.isUpdate) {
-                        validable.ValidateUpdate(trigger.newMap, trigger.oldMap);
-                    }
+                if (validable.isValidationDisabled() || Bypass_UTL.isValidationRuleDisabled()) {
+                    return;
+                }
+                if (Trigger.IsInsert) {
+                    validable.ValidateInsert(trigger.new);
+                }
+                if (Trigger.isUpdate) {
+                    validable.ValidateUpdate(trigger.newMap, trigger.oldMap);
                 }
             }
         }

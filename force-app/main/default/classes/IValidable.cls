@@ -4,6 +4,7 @@
 * @date May 22, 2020
 */
 public interface IValidable {
+    Boolean isValidationDisabled();
     void ValidateInsert (List<SObject> newItems);
     void ValidateUpdate (Map<Id, SObject> newItems, Map<Id, SObject> oldItems);
 }

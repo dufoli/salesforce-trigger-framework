@@ -5,6 +5,10 @@
 */
 public class TaskTriggerHandler implements ITriggerHandler {
 
+    public static Boolean triggerDisabled = false;
+
+    public Boolean isDisabled() { return triggerDisabled; }
+
     public Map<String, List<SObject>> LoadData () { return new Map<String, List<SObject>> ();}
 
     public void BeforeInsert(List<SObject> newItems, Map<String, List<SObject>> dictionnary) {}
