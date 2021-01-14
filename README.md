@@ -72,6 +72,8 @@ rem: you can implement common rules for update and insert in same function and c
 - [x] trigger: util isChanged to compare old and new value
 - [x] trigger: switch dico + new/old to context and add few things (like state Map to pass data between function)
 - [x] trigger: writter pipeline with promise pattern
+- [ ] cache: caching for SOQL data in static map/plateform cache or session cache => define structure
+- [ ] log: add a log framework with different outputs (event, object, call api) and flush to avoid  n insert of log in object
 - [ ] rollup: calculate multiple agregate at the same time (multiple alias mapping)
 - [ ] rollup: use String.format() with pattern {0} to set value
 - [ ] rollup: try to find object from dico first if found
